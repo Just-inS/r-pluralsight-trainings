@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1583370327419.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "924102572",
+    "id" : "C2648E08",
+    "lastKnownWriteTime" : 1583370383,
+    "last_content_update" : 1583370383152,
+    "path" : "~/Documents/Projects/building-your-first-R-analytics-solution/m5-communicating-and-documenting-your-analysis-with-r-markdown_with-demos/demos/after/property_sales/sales_report.Rmd",
+    "project_path" : "sales_report.Rmd",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

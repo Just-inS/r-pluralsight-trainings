@@ -1,0 +1,9 @@
+{
+    "path" : "~/Desktop/property_sales",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}

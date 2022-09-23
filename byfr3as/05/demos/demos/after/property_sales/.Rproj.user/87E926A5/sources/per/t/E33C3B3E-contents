@@ -1,0 +1,15 @@
+if (interactive()) {
+  suppressMessages(require(devtools))
+  suppressMessages(require(testthat))
+}
+
+options(
+  usethis.full_name = "Charlotte Wickham",
+  usethis.protocol  = "ssh",
+  usethis.description = list(
+    `Authors@R` = 'person("Charlotte", "Wickham", email = "cwickham@gmail.com", role = c("aut", "cre"), 
+    comment = c(ORCID = "0000-0002-6365-5499"))',
+    Version = "0.0.0.9000"
+  )
+)
+
