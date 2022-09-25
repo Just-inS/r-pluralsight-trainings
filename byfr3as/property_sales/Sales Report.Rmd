@@ -1,0 +1,81 @@
+---
+title: "Sales Report"
+output:
+  pdf_document: 
+    toc: yes
+  html_document: 
+    toc: yes
+date: "2022-09-24"
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(knitr)
+```
+
+## Data Import
+
+```{r import, echo = FALSE, results = "hide", message = FALSE}
+# import data
+#sales <- read_csv("/home/justin/Documents/Repos/RProjects/r-pluralsight-trainings/byfr3as/property_sales/data/property_sales.csv") #abs path
+sales <- read_csv("data/property_sales.csv") #relative path (more reproducible)
+
+# first five rows of fake data
+head(x = sales, n = 5)
+
+# number of rows of fake data
+total_sales <- nrow(sales)
+total_sales
+
+```
+
+A total of **`r total_sales`** property sales were imported from `property_sales.csv`.
+
+## Dwelling Sales by Neighborhood
+
+```{r filter-dwelling, include=FALSE}
+# keep just "Dwelling" sales
+dwelling_sales <- filter(sales, property_class == "Dwelling")
+
+# percentage of sales that were dwellings
+percent_dwelling <- (nrow(dwelling_sales) / total_sales) * 100
+
+```
+Of all the sales, **`r round(percent_dwelling, 1)`%** were dwellings.
+
+```{r summary, echo=FALSE}
+# average price by neighborhood
+dwelling_summary <- dwelling_sales %>% 
+  group_by(neighborhood) %>% 
+  summarize(
+    n_sales = n(),
+    mean_price = mean(sales_price),
+    median_price = median(sales_price)
+  ) %>% 
+  arrange(median_price)
+
+# save dwelling_summary data to disk
+write_csv(dwelling_summary, "results/dwelling_summary.csv")
+
+dwelling_summary %>% kable()
+
+```
+
+
+
+```{r plot, echo=FALSE,  message=FALSE, fig.width=8, fig.height=4.5}
+# plot all sale prices by neighborhood
+dwelling_sales %>% 
+  ggplot(aes(sales_price)) +
+  geom_histogram() + 
+  scale_x_log10(labels = scales::label_dollar()) +
+  facet_wrap(~ neighborhood, scale = "free_y") +
+  labs(
+    x = "Sales price",
+    y = "Number of sales"
+  )
+
+# save dwelling sales plots to disk
+ggsave("results/sales_histograms.png", width=8, height = 4.5)
+```
+
