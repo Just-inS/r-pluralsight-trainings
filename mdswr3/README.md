@@ -1,0 +1,1 @@
+This project contains files related to the "Merging Data Sources with R 3" Course offered on PluralSight

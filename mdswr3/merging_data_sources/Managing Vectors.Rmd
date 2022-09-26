@@ -1,0 +1,223 @@
+---
+title: "Managing Vectors"
+output: html_document
+date: "2022-09-26"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Managing Vectors Course Subsection
+
+### Creating a Vector from Values
+
+```{r cvfv}
+# Code pairs with Creating a Vector from Values subsection of PS course
+
+# Produce a vector with consecutive numbers
+x <- 1:5
+y <- 6:10
+is.vector(x)
+typeof(y)
+
+plot(x, y)
+
+
+```
+
+A Vector is a conglomeration of values of the same type. 
+Order Matters.
+A number/value is a vector of 1.
+
+```{r}
+countries <- c('USA', 'UK')
+typeof(countries)
+length(countries)
+
+# to check length of a string, use nchar() func
+```
+
+Combine function -c() is used when vector is unordered. 
+
+All elements in a vector must be of the same type. If you want to combine elements of different types using -c(), R will use implicit coercion...
+  changing types automatically to convert them to the same type
+
+```{r}
+mix <- c(1, TRUE, 'way')
+mix
+typeof(mix)
+```
+
+Nesting vectors inside of other vectors will flatten them:
+```{r}
+nesting_doll <- c(1, 2, c(4, 5, c(6, 'seven')))
+nesting_doll
+# Note that implicit coercion still applies
+```
+
+
+### Merging Values into a Vector
+
+#### Merging Values at the start/end of a vector:
+```{r}
+v <- c(2:9)
+
+# Merge values at the start
+v <- c(1, v)
+
+# Merge values at the end
+v <- c(v, 10)
+
+# Merging multiple values
+v1 <- c(1:5)
+v2 <- c(6:10)
+
+v3 <- c(v1, v2)
+v4 <- c(v2, v1)
+
+v5 <- c(v1, 11:15)
+```
+
+
+#### Merging Values inside a vector -> to do so use append() func
+```{r}
+poem <- c('Mary', 'little', 'lamb')
+
+poem <- append(poem, c('had', 'a'), after = 1)
+```
+
+Can see a behind the scenes look at append() func implementation:
+```{r}
+append
+```
+Here we see that the append() is a wrapper around the c() func.
+
+#### Performance Implications of one big merge vs many small merges
+
+One big merge is much better unless using a small sample size as the vector needs to be resized with every append.
+
+### Merging Vectors into a Character Vector
+
+Applies to scenarios such as merging strings or an sql query
+```{r}
+# Wrong way:
+"hello" + "world"
+```
+Right way:
+Use paste() function to:
+  - Merge vectors of length = 1
+  - Merge vectors of same length > 1
+  - Merge vectors into one string
+  
+```{r}
+# Recap
+length("hello") # Vector of length 1
+nchar("hello") # Composed of 5 characters
+c('h', 'e', 'l', 'l', 'o') # Vector of length 5
+
+# Merge vectors of length = 1
+paste('hello', 'world') # Defaults to incorporating a space between elements
+
+# Note: One or more objects can be pasted, to then be converted to a character vector (implicit coercion)
+paste(1, 'two', TRUE)
+
+# Test: Replace default separator with an empty space
+paste('hello', 'world', sep = '')
+
+# Merge vectors of same length > 1
+paste(c('name', 'age'), c('John', 5), c('Doe', 'years')) # Returns a character vector of length 2: "name John Doe" "age 5 years"
+
+# To merge vectors into one string... use collapse() arg
+paste(c('name', 'age'), 
+      c('John', 5), 
+      c('Doe', 'years'), collapse = '-') # Returns: "name John Doe-age 5 years"
+```
+
+Also use paste() function and recycling to:
+  - Merge vectors of different lengths
+  
+  - Recycling will automatically repeat or 'recycle' the shorter vectors to match the length of the largest vector
+```{r}
+paste(c('name', 'age', 'Name', 'Age'),
+      c('John', 5)) # Returns "name John" "age 5"     "Name John" "Age 5" *Equivalent to copying and pasting the smaller vector seen below
+
+paste(c('name', 'age', 'Name', 'Age'),
+      c('John', 5,     'John', 5))
+
+paste(c('name', 'age', 'Name', 'Age', 'Other'),
+      c('John', 5,     'John', 5))
+
+# Recycling is applicable to functions other than paste()... for ex:
+c(1, 2) + 3 # Returns: [1] 4 5
+
+# Which is equivalent to:
+c(1, 2) +
+c(3, 3) # Returns [1] 4 5
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
