@@ -151,92 +151,147 @@ Note, this works because we are explicitly choosing columns present in both data
 Recap:
 
 * Inner joins are a great way to pull data with a common unique identifier
-* What about grabbing the identifiers that are not common? Can they also be retrieved?
+* What about pulling data with identifiers that are not common? Can this also be accomplished?
     + This is answered in the Left, Right, and Full Outer Joins Section.
-
-
-
-
-
-
-
 
 ### Left, Right, and Full Outer Joins
 
+Here we gain more control over the joining results by understanding how to retrieve not only rows with common ids, but also other rows from your data frames.
+
+#### Left Outer Joins
+
+```{r}
+# Setting the stage
+customer.names <- data.frame(id = 1:3, name = c('Helena', 'Astrid', 'Eduardo'))
+customer.countries <- data.frame(customer_id = 2:4, country = c('USA', 'Spain', 'USA'))
+
+merge(customer.names, customer.countries, by.x = 'id', by.y = 'customer_id')
+# Note this is the inner join that gives us rows with common ids
+```
+A left outer join means the data frame on the left should get all its ids, in addition to the common ids.
+
+* To accomplish this, we simply add "all.x = TRUE"
+```{r}
+merge(customer.names, customer.countries, by.x = 'id', by.y = 'customer_id', all.x = TRUE)
+# Note that by convention, x is the first data frame and y is the second
+```
+
+
+#### Right Outer Joins
+
+Here we simply replace x with y from the Left Outer Join section:
+```{r}
+merge(customer.names, customer.countries, by.x = 'id', by.y = 'customer_id', all.y = TRUE)
+```
+
+#### Full Outer Joins
+
+Produces a data frame with all ids included from both sets
+```{r}
+merge(customer.names, customer.countries, by.x = 'id', by.y = 'customer_id', all = TRUE)
+```
+
+#### OIO Mnemonic
+
+<center>
+![OIO Mnemonic Illustration Image](./data/M3. Joining Data Sets with the merge() function/C3. Left, Right and Full Outer Joins/mnemonic.png){width=50%}
+<center>
+
 ### Data Frame Keys
+
+Key Columns: Primary Key and Foreign Keys.
+
+* Primary Keys:
+    + Is a column or combination of columns
+    + Expresses a relationship about something it has in common with another data frame
+    + Duplicates are not allowed
+    + Missing values are not allowed
+    
+* Foreign Keys:
+    + Is a column or combination of columns
+    + Expresses a relationship about something it has in common with another data frame
+    + Duplicates are allowed
+    + Missing values are allowed
+    
+Ex:
+```{r}
+customers <- data.frame(customer_id = 1:3, name = c('Anna', 'Bill', 'Cliff'))
+
+invoices <- data.frame(invoice_id = 1:5, total = c(100, 200, 300, 400, 500), cust_id = c(2, 3, 1, NA, 3))
+
+customers
+
+invoices
+```
+
+Note that in the above data frames:
+
+* customers data frame:
+    + customer_id is the primary key (No duplicates or missing values)
+    
+* invoices data frame:
+    + invoice_id is the primary key (No duplicates or missing values)
+    + cust_id is the foreign key (has duplicates and NA values)(Expresses a relationship to customer_id col of customers data frame)
+    
+Lets perform an inner join of the two data frames with this knowledge:
+```{r}
+merge(invoices, customers, by.x = 'cust_id', by.y = 'customer_id')
+```
 
 ### Data Frame Relationships
 
+Imagine you want to join to data frames and already have identified the primary and foreign keys on which to join
 
+* Knowing the relationships between these keys makes it much easier to understand what to expect and get join results faster
 
+Three most important relationships between two data frames:
 
+* One-to-One
+    + Each key in the left data frame has a corresponding key in the right
+    
+![1to1 Relation Illustration Image](./data/M3. Joining Data Sets with the merge() function/C5. Data Frame Relationships/onetoone.png)
 
+```{r}
+# one-to-one relationship merge
+countries <- data.frame(id = 1:3, name = c('USA', 'UK', 'Spain'))
 
+capitals <- data.frame(city = c('London', 'Washington', 'Madrid'), country_id = c(2, 1, 3))
 
+merge(countries, capitals, by.x = 'id', by.y = 'country_id')
+```
 
+* One-to-Many
+    + Each key in the left data frame may have one or more corresponding keys in the right
+![1toMany Relation Illustration Image](./data/M3. Joining Data Sets with the merge() function/C5. Data Frame Relationships/onetomany.png)
 
+```{r}
+# one-to-many relationship
+customers <- data.frame(id=1:2, name=c('Anne', 'John'))
 
+invoices <- data.frame(invoice_id=1:3, total=c(100, 200, 300), customer_id=c(1, 2, 2))
 
+merge(customers, invoices, by.x = 'id', by.y = 'customer_id')
+```
 
+* Many-to-Many
+    + One or multiple keys in the left data frame may have one or more corresponding keys in the right
+![ManytoMany Relation Illustration Image](./data/M3. Joining Data Sets with the merge() function/C5. Data Frame Relationships/manytomany.png)
 
+```{r}
+# many-to-many relationship
+invoices <- data.frame(invoice_id=1:2, total=c(1000, 2000))
 
+services <- data.frame(service_id=1:2, name=c('consulting', 'training'))
 
+# This third data frame stores the mappings between the first two allowing the many to many relationship to occur
+invoicelines <- data.frame(service_id=c(1, 2, 1, 2), invoice_id=c(1, 1, 2, 2), price=c(500, 500, 1000, 1000))
 
+merged_invoices_lines <- merge(invoices, invoicelines, by = 'invoice_id')
+merged_invoices_lines
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+merged_services_invoices <- merge(merged_invoices_lines, services, by = 'service_id')
+merged_services_invoices
+```
 
 
 
