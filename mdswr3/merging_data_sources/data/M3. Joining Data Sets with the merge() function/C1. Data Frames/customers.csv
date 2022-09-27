@@ -1,0 +1,8 @@
+id,name,company,country,vip
+1,Helena,Globomantics,USA,TRUE
+2,Astrid,,USA,FALSE
+3,Eduardo,,Spain,TRUE
+4,Roberto,Wired Brain Coffee,USA,TRUE
+5,Fernanda,,UK,FALSE
+6,Mark,,,FALSE
+7,Jennifer,Globomantics,UK,TRUE

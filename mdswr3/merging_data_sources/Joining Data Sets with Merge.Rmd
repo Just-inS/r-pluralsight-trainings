@@ -12,3 +12,231 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Data Frames
 
+Data frames provide more flexibility than matrices by allowing the mixing of data types.
+
+#### Create a data frame:
+```{r}
+customers <- data.frame(id = c(1, 2, 3), name = c('Ann', 'Bill', 'Charles'), is.vip = c(TRUE, FALSE, TRUE))
+customers
+
+is.data.frame(customers)
+
+head(customers)
+
+str(customers)
+
+# Note that name is a 'Factor w/ 3 levels"...
+```
+This means it is a variable that can take a limited number of variables/categories. This categorization makes sense in some situations but not here thus we must correct this:
+```{r}
+customers <- data.frame(id = c(1, 2, 3), name = c('Ann', 'Bill', 'Charles'), is.vip = c(TRUE, FALSE, TRUE), stringsAsFactors = FALSE)
+customers
+
+str(customers)
+# Note that the name attribute is now a character vector
+```
+
+#### Loading data from a CSV file into a dataframe:
+```{r}
+customers <- read.csv('./data/M3. Joining Data Sets with the merge() function/C1. Data Frames/customers.csv')
+customers
+
+str(customers)
+# Note we again run into the issue with attributes being incorrectly assigned the class of Factor
+
+# The Fix:
+customers <- read.csv('./data/M3. Joining Data Sets with the merge() function/C1. Data Frames/customers.csv', as.is = TRUE)
+customers
+
+str(customers)
+```
+To Recap:
+
+* Data Frames can mix attribute types but...
+* All data in a column must be of the same type
+* Keep in mind, by default string variables can be assigned the type Factor which may be inaccurate
+
+### Inner Joins
+
+#### Example
+
+* Data arrives in the form of two data frames:
+    + First data frame contains customer names
+    + Second data frame contains customer countries
+```{r}
+customer.names <- data.frame(id = 1:3, name = c('Helena', 'Astrid', 'Eduardo'))
+customer.countries <- data.frame(customer_id = 2:4, country = c('USA', 'Spain', 'USA'))
+customer.names
+customer.countries
+
+# Note there is some overlap between ids in the two data frames
+```
+The Problem:
+
+* How can we merge these two data frames to get only rows with common ids?
+
+An incorrect attempt: cbind()
+```{r}
+cbind(customer.names, customer.countries)
+```
+With cbind(), columns from both data frames are placed side by side and ids are mismatched.
+
+* cbind() can only work if we have the same ids in the same order in each of the data frames.
+
+#### Inner join with merge()
+
+The solution:
+
+* An inner join between the two data frames by the common variable: customer id
+
+![An Inner Join Illustration Image](./data/M3. Joining Data Sets with the merge() function/C2. Inner Joins/inner_join.png)
+
+```{r}
+# Note: ?merge for documentation
+
+merge(customer.names, customer.countries)
+```
+Note that merging them directly returns all possible combinations of rows between the two data frames:
+
+* Three rows in each data frame - thus 3x3 = 9 rows, however...
+* Most rows are invalid combinations
+* To do a valid inner join, we need to explicitly state which common columns are meant to be involved
+
+```{r}
+merge(customer.names, customer.countries, by.x = 'id', by.y = 'customer_id')
+```
+Thus, merging these two columns gives us the inner-join of the two data frames.
+
+#### Good Habits
+
+* Use unique ids
+    + But what if rows are uniquely identified by two columns instead of one... a composite unique id??
+    + Good news, you can use a composite unique id:
+```{r}
+names <- data.frame(first.name = c('Helena', 'Helena', 'Tom'), last.name = c('Jones', 'Troy', 'Jones'), age = c(20, 30, 40))
+countries <- data.frame(first.name = c('Helena', 'Helena', 'Tom'), last.name = c('Jones', 'Troy', 'Jones'), country = c('USA', 'UK', 'USA'))
+
+# Incorrect Merge
+merge(names, countries, by.x = 'first.name', by.y = 'first.name')
+
+# Correct Merge
+merge(names, countries, by.x = c('first.name', 'last.name'), by.y = c('first.name', 'last.name'))
+```
+
+A Final point on good habits for inner joins:
+
+* Natural Joins can be useful, but their use should be limited to avoid errors:
+    + A Natural Join entails relying on column names for joining...
+    + It is the default used by the merge() function call
+    + An example of a natural join based on the two data frames previously used:
+    
+```{r}
+merge(names, countries)
+```
+
+What's happening here / why don't we need to be explicit??
+
+* By default, merge uses the intersection of column names (reference documentation: ?merge).
+    + Since both data frames have a first.name and last.name column, we do not need to be explicit.
+* This works out in this scenario, but with larger data frames it can become messy and should be used sparingly.
+
+A middle-ground:
+
+* Merge and use the by parameter, specifying the columns:
+```{r}
+merge(names, countries, by = c('first.name', 'last.name'))
+```
+Note, this works because we are explicitly choosing columns present in both data frames.
+
+Recap:
+
+* Inner joins are a great way to pull data with a common unique identifier
+* What about grabbing the identifiers that are not common? Can they also be retrieved?
+    + This is answered in the Left, Right, and Full Outer Joins Section.
+
+
+
+
+
+
+
+
+### Left, Right, and Full Outer Joins
+
+### Data Frame Keys
+
+### Data Frame Relationships
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,10 @@
+(customer.names <- data.frame(id=1:3,
+                              name=c('Helena', 'Astrid', 'Eduardo')))
+
+(customer.countries <- data.frame(customer_id=2:4,
+                                  country=c('USA', 'Spain', 'USA')))
+
+merge(customer.names, customer.countries, 
+      by.x = 'id', by.y = 'customer_id')
+inner_join(customer.names, customer.countries, 
+           by = c('id'='customer_id'))
