@@ -1,6 +1,8 @@
 ---
 title: "Managing Vectors"
-output: html_document
+output:
+  html_document:
+  pdf_document: 
 date: "2022-09-26"
 ---
 
@@ -13,11 +15,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ### Creating a Vector from Values
 
 ```{r cvfv}
-# Code pairs with Creating a Vector from Values subsection of PS course
-
 # Produce a vector with consecutive numbers
 x <- 1:5
 y <- 6:10
+x
+y
 is.vector(x)
 typeof(y)
 
@@ -26,22 +28,21 @@ plot(x, y)
 
 ```
 
-A Vector is a conglomeration of values of the same type. 
-Order Matters.
-A number/value is a vector of 1.
+* A Vector is a conglomeration of values of the same type. 
+* Order Matters.
+* A number/value is a vector of 1.
 
 ```{r}
 countries <- c('USA', 'UK')
-typeof(countries)
-length(countries)
+typeof(countries) # Result: character
+length(countries) # Result: 2
 
 # to check length of a string, use nchar() func
 ```
 
-Combine function -c() is used when vector is unordered. 
+Combine function -c() is used when vector is un-ordered. 
 
-All elements in a vector must be of the same type. If you want to combine elements of different types using -c(), R will use implicit coercion...
-  changing types automatically to convert them to the same type
+All elements in a vector must be of the same type. If you want to combine elements of different types using -c(), R will use implicit coercion... changing types automatically to convert them to the same type.
 
 ```{r}
 mix <- c(1, TRUE, 'way')
@@ -65,9 +66,11 @@ v <- c(2:9)
 
 # Merge values at the start
 v <- c(1, v)
+v
 
 # Merge values at the end
 v <- c(v, 10)
+v
 
 # Merging multiple values
 v1 <- c(1:5)
@@ -77,14 +80,19 @@ v3 <- c(v1, v2)
 v4 <- c(v2, v1)
 
 v5 <- c(v1, 11:15)
+
+v3
+v4
+v5
 ```
 
 
-#### Merging Values inside a vector -> to do so use append() func
+#### Merging Values inside a vector is accomplished through the use of the append() func
 ```{r}
 poem <- c('Mary', 'little', 'lamb')
 
 poem <- append(poem, c('had', 'a'), after = 1)
+poem
 ```
 
 Can see a behind the scenes look at append() func implementation:
@@ -102,13 +110,14 @@ One big merge is much better unless using a small sample size as the vector need
 Applies to scenarios such as merging strings or an sql query
 ```{r}
 # Wrong way:
-"hello" + "world"
+#"hello" + "world"
 ```
 Right way:
 Use paste() function to:
-  - Merge vectors of length = 1
-  - Merge vectors of same length > 1
-  - Merge vectors into one string
+
+* Merge vectors of length = 1
+* Merge vectors of same length > 1
+* Merge vectors into one string
   
 ```{r}
 # Recap
@@ -117,7 +126,7 @@ nchar("hello") # Composed of 5 characters
 c('h', 'e', 'l', 'l', 'o') # Vector of length 5
 
 # Merge vectors of length = 1
-paste('hello', 'world') # Defaults to incorporating a space between elements
+paste('hello', 'world') # Defaults to incorporating one space between elements
 
 # Note: One or more objects can be pasted, to then be converted to a character vector (implicit coercion)
 paste(1, 'two', TRUE)
@@ -135,9 +144,10 @@ paste(c('name', 'age'),
 ```
 
 Also use paste() function and recycling to:
-  - Merge vectors of different lengths
-  
-  - Recycling will automatically repeat or 'recycle' the shorter vectors to match the length of the largest vector
+
+* Merge vectors of different lengths
+* Recycling will automatically repeat or 'recycle' the shorter vectors to match the length of the largest vector
+
 ```{r}
 paste(c('name', 'age', 'Name', 'Age'),
       c('John', 5)) # Returns "name John" "age 5"     "Name John" "Age 5" *Equivalent to copying and pasting the smaller vector seen below
@@ -157,67 +167,57 @@ c(3, 3) # Returns [1] 4 5
 
 ```
 
+#### Merging Vectors into a Matrix
 
+What is a matrix in R? 
 
+* A vector with multiple dimensions instead of 1.
+* All values in a matrix must be of the same type.
 
+```{r}
+first_matrix <- matrix(1, nrow = 2, ncol = 3)
+first_matrix
 
+is.matrix(first_matrix) # Returns: TRUE
+is.vector(first_matrix) # Returns: FALSE
+typeof(first_matrix) # Returns: double
 
+length(first_matrix) # Returns: 6
 
+larger_matrix <- matrix(1:9, nrow = 3, ncol = 3)
+larger_matrix
 
+# Isolate values from a matrix using row and col indicies
+second_col <- larger_matrix[,2]
+second_col
 
+is.vector(second_col) # Returns TRUE
 
+third_row <- larger_matrix[3,]
+third_row
 
+is.vector(third_row) # Returns TRUE
 
+```
 
+Thus, a matrix is composed of a series of vectors stacked on top of one another, or a series of columns placed side by side.
+We should logically then be able to build out a matrix by stacking rows or adding columns.
+To do so, we use cbind()/rbind() functions to merge vectors into a matrix:
 
+```{r}
+# Combining vectors of length 1
+cbind('hello', 'world')
 
+rbind('hello', 'world')
 
+# Combining vectors of length > 1
+cbind(c(1, 2, 3), c(4, 5, 6)) # Returns: a 3x2 matrix (cbind "sees" two distinct objects)
+rbind(c(1, 2, 3), c(4, 5, 6)) # Returns: a 2x3 matrix
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#Combining vectors of different lengths - Recycling rule is again applied
+cbind(c(1, 2, 3), 5)
+rbind(c('a', 'b', 'c', 'd', 'e'), c(1, 2), TRUE)
+# Note that implicit coercion is applied
+```
 
 

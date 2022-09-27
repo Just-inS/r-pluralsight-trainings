@@ -1,0 +1,14 @@
+---
+title: "Joining Data Sets with Merge()"
+output: html_document
+date: "2022-09-27"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Joining Data Sets with the Merge() Function Course Subsection
+
+### Data Frames
+
